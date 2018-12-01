@@ -1,0 +1,2 @@
+class SoilMoistureReading < SensorReading
+end

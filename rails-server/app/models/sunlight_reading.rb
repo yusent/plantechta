@@ -1,0 +1,2 @@
+class SunlightReading < SensorReading
+end

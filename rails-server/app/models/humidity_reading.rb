@@ -1,0 +1,2 @@
+class HumidityReading < SensorReading
+end
