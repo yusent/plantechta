@@ -1,6 +1,6 @@
 class SensorReadingsController < ApplicationController
   def create
-    reading = SensorReadings.create sensor_readings_params
+    reading = SensorReading.create sensor_readings_params
     response = {
       data: reading.as_json
     }
@@ -9,7 +9,7 @@ class SensorReadingsController < ApplicationController
   end
 
   def index
-    response = SensorReadings.page(page, per_page).as_json
+    response = SensorReading.page(page, per_page).as_json
     render json: response
   end
 
