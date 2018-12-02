@@ -1,13 +1,43 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import logo from './assets/logo.png';
 
 export default class App extends React.Component {
-  render() {
+  state = {
+    humidity: null,
+    soilMoisture: null,
+    sunlight: null,
+    temperature: null,
+  };
+
+  renderValue = (value) => {
+    if (!value) {
+      return <ActivityIndicator color="#19499b" size={20} />;
+    }
+
     return (
-      <View style={styles.container}>
+      <Text style={styles.valueText}>
+        {value}
+      </Text>
+    );
+  };
+
+  // 22 ℃
+
+  render() {
+    const { humidity, soilMoisture, sunlight, temperature } = this.state;
+
+    return (
+      <ScrollView style={styles.container}>
         <View style={styles.section}>
           <Image
             source={logo}
@@ -32,9 +62,7 @@ export default class App extends React.Component {
             </Text>
           </View>
 
-          <Text style={styles.valueText}>
-            12%
-          </Text>
+          {this.renderValue(humidity)}
         </View>
 
         <View style={styles.section}>
@@ -50,9 +78,7 @@ export default class App extends React.Component {
             </Text>
           </View>
 
-          <Text style={styles.valueText}>
-            24%
-          </Text>
+          {this.renderValue(soilMoisture)}
         </View>
 
         <View style={styles.section}>
@@ -68,9 +94,7 @@ export default class App extends React.Component {
             </Text>
           </View>
 
-          <Text style={styles.valueText}>
-            86198 lux
-          </Text>
+          {this.renderValue(sunlight)}
         </View>
 
         <View style={styles.section}>
@@ -86,11 +110,9 @@ export default class App extends React.Component {
             </Text>
           </View>
 
-          <Text style={styles.valueText}>
-            22 ℃
-          </Text>
+          {this.renderValue(temperature)}
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -104,7 +126,8 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 150,
+    height: 128,
+    width: 100,
   },
 
   param: {
