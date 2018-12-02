@@ -5,10 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import logo from './assets/logo.png';
 
 const API_ADDRESS = 'http://168.62.10.216:8080/api';
@@ -29,7 +30,6 @@ export default class App extends React.Component {
     try {
       const response = await fetch(`${API_ADDRESS}/sensor_readings/all_last`);
       const payload = await response.json();
-
       const { humidity, soil_moisture, sunlight, temperature } = payload.data;
 
       this.setState({
@@ -41,6 +41,10 @@ export default class App extends React.Component {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  water = () => {
+    fetch(`${API_ADDRESS}/water`, { method: 'POST' });
   };
 
   renderValue = (value) => {
@@ -59,8 +63,11 @@ export default class App extends React.Component {
     const { humidity, soilMoisture, sunlight, temperature } = this.state;
 
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.section}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        style={styles.container}
+      >
+        <View style={[styles.section, styles.banner]}>
           <Image
             source={logo}
             style={styles.logo}
@@ -134,6 +141,22 @@ export default class App extends React.Component {
 
           {this.renderValue(temperature)}
         </View>
+
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onPress={this.water}
+          style={styles.waterButton}
+        >
+          <Entypo
+            color="#fff"
+            name="water"
+            size={32}
+          />
+
+          <Text style={styles.waterButtonText}>
+            Water now
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     );
   }
@@ -143,8 +166,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f1eff0',
     flex: 1,
+    paddingTop: getStatusBarHeight(),
+  },
+
+  content: {
     padding: 10,
-    paddingTop: 10 + getStatusBarHeight(),
+    paddingBottom: 30,
   },
 
   logo: {
@@ -183,5 +210,22 @@ const styles = StyleSheet.create({
 
   valueText: {
     fontSize: 20,
+  },
+
+  waterButton: {
+    alignSelf: 'center',
+    backgroundColor: '#19499b',
+    borderRadius: 5,
+    flexDirection: 'row',
+    marginTop: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+
+  waterButtonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '500',
+    marginLeft: 10,
   },
 });
