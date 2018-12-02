@@ -11,12 +11,36 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import logo from './assets/logo.png';
 
+const API_ADDRESS = 'http://168.62.10.216:8080/api';
+
 export default class App extends React.Component {
   state = {
     humidity: null,
     soilMoisture: null,
     sunlight: null,
     temperature: null,
+  };
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    try {
+      const response = await fetch(`${API_ADDRESS}/sensor_readings/all_last`);
+      const payload = await response.json();
+
+      const { humidity, soil_moisture, sunlight, temperature } = payload.data;
+
+      this.setState({
+        humidity: `${humidity}%`,
+        soilMoisture: `${soil_moisture}%`,
+        sunlight: `${sunlight} lux`,
+        temperature: `${temperature} ℃`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   renderValue = (value) => {
@@ -30,8 +54,6 @@ export default class App extends React.Component {
       </Text>
     );
   };
-
-  // 22 ℃
 
   render() {
     const { humidity, soilMoisture, sunlight, temperature } = this.state;
