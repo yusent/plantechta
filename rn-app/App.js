@@ -27,6 +27,13 @@ export default class App extends React.Component {
   }
 
   getData = async () => {
+    this.setState({
+      humidity: null,
+      soilMoisture: null,
+      sunlight: null,
+      temperature: null,
+    });
+
     try {
       const response = await fetch(`${API_ADDRESS}/sensor_readings/all_last`);
       const payload = await response.json();
@@ -142,27 +149,51 @@ export default class App extends React.Component {
           {this.renderValue(temperature)}
         </View>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={this.water}
-          style={styles.waterButton}
-        >
-          <Entypo
-            color="#fff"
-            name="water"
-            size={32}
-          />
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={this.getData}
+            style={styles.waterButton}
+          >
+            <MaterialCommunityIcons
+              color="#fff"
+              name="refresh"
+              size={32}
+            />
 
-          <Text style={styles.waterButtonText}>
-            Water now
-          </Text>
-        </TouchableOpacity>
+            <Text style={styles.waterButtonText}>
+              Refresh
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.9}
+            onPress={this.water}
+            style={styles.waterButton}
+          >
+            <Entypo
+              color="#fff"
+              name="water"
+              size={32}
+            />
+
+            <Text style={styles.waterButtonText}>
+              Water now
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 30,
+  },
+
   container: {
     backgroundColor: '#f1eff0',
     flex: 1,
@@ -213,11 +244,9 @@ const styles = StyleSheet.create({
   },
 
   waterButton: {
-    alignSelf: 'center',
     backgroundColor: '#19499b',
     borderRadius: 5,
     flexDirection: 'row',
-    marginTop: 30,
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
