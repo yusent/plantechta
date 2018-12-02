@@ -16,10 +16,10 @@ class SensorReadingsController < ApplicationController
   def all_last
     render json: {
       data: {
-        humidity: HumidityReading.last.value,
-        temperature: TemperatureReading.last.value,
-        soil_moisture: SoilMoistureReading.last.value,
-        sunlight: SunlightReading.last.value,
+        humidity: HumidityReading.last&.value,
+        temperature: TemperatureReading.last&.value,
+        soil_moisture: SoilMoistureReading.last&.value,
+        sunlight: SunlightReading.last&.value,
       }
     }
   end
